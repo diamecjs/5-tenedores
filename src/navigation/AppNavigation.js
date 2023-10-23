@@ -1,47 +1,53 @@
 import React from 'react'
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { Icon } from "react-native-elements"
-import { RestaurantsScreen } from "../screens/RestaurantsScreen"
+import { RestaurantStack } from "./RestaurantStack";
 import { FavoritesScreen } from "../screens/FavoritesScreen"
 import { RankingScreen } from "../screens/RankingScreen"
 import { SearchScreen } from "../screens/SearchScreen"
 import { AccountScreen } from "../screens/AccountScreen"
+import { screen } from "../utils/index"
 
 
 const Tab = createBottomTabNavigator();
 
 export function AppNavigation() {
     return (
-        <Tab.Navigator screenOptions={({ router }) => ({
-            tabBarActiveTintColor: "#00a680",
-            tabBarActiveTintColor: "#646464",
-            tabBarIcon: ({ color, size }) => <Icon type="material-community" name="home-outline" color={color} size={size} />
-        })}>
-            <Tab.Screen name="Restaurant" component={RestaurantsScreen} />
-            <Tab.Screen name="Favorites" component={FavoritesScreen} />
-            <Tab.Screen name="Ranking" component={RankingScreen} />
-            <Tab.Screen name="Search" component={SearchScreen} />
-            <Tab.Screen name="Account" component={AccountScreen} />
+        <Tab.Navigator
+            screenOptions={({ route }) => ({
+                headerShown: false,
+                tabBarActiveTintColor: "#008000", 
+                tabBarInactiveTintColor: "#646464", 
+                tabBarIcon: ({ color, size }) => screenOptions(route, color, size),
+            })}
+        >
+            <Tab.Screen name={screen.restaurant.tab} component={RestaurantStack}  options={{ title: "Restaurantes" }} />
+            <Tab.Screen name={screen.favorites.tab} component={FavoritesScreen}  options={{ title: "Favoritos" }} />
+            <Tab.Screen name={screen.ranking.tab} component={RankingScreen}  options={{ title: "Ranking" }} />
+            <Tab.Screen name={screen.search.tab} component={SearchScreen}  options={{ title: "Buscar" }} />
+            <Tab.Screen name={screen.account.tab} component={AccountScreen}  options={{ title: "Mi Cuenta" }} />
         </Tab.Navigator>
     )
 }
 
-function screenOptions(router, color, size){
+function screenOptions(route, color, size) {
     let iconName;
 
-    if (router.name === "Restaurant"){
-        iconName = "compass-outline";
+    if (route.name === screen.restaurant.tab) {
+        iconName = "silverware";
     }
-    if(router.name === "favorites"){
-      iconName = "heart-outline";
+    if (route.name === screen.favorites.tab) {
+        iconName = "heart-outline";
     }
-    if (router.name === "Ranking"){
-        iconName ="star-outline";
+    if (route.name === screen.ranking.tab) {
+        iconName = "star-outline";
     }
-    if (router.name === "Search"){
-        iconName=  "magnify";
+    if (route.name === screen.search.tab) {
+        iconName = "magnify";
     }
-    if (router.name ==="Account"){
-        iconName =   "home-outline";
+    if (route.name === screen.account.tab) {
+        iconName = "account-circle-outline";
     }
+
+    return <Icon type="material-community" name={iconName} color={color} size={size} />;
 }
